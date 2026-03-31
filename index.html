@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Birthday Card</title>
+<style>
+body {
+  margin:0;
+  font-family:Arial;
+  background:linear-gradient(to right,#ffd6e0,#ffe6f0);
+  overflow:hidden;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+/* pages */
+.page {
+  display:none;
+  height:100vh;
+  width:100vw;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  flex-direction:column;
+}
+.active { display:flex; }
+
+/* card box */
+.cardBox {
+  background:white;
+  padding:30px;
+  border-radius:25px;
+  width:80%;
+  max-width:500px;
+  box-shadow:0px 0px 30px pink;
+  border:6px solid #ff4d6d;
+  position:relative;
+}
+
+/* glowing title */
+.glow {
+  font-size:38px;
+  color:#ff4d6d;
+  animation:glowText 2s infinite alternate;
+}
+@keyframes glowText {
+  from {text-shadow:0 0 10px pink;}
+  to {text-shadow:0 0 25px red;}
+}
+
+/* front photo */
+.circlePhoto {
+  width:200px;
+  height:200px;
+  border-radius:50%;
+  border:6px solid pink;
+  object-fit:cover;
+  animation:heartbeat 1.5s infinite;
+}
+@keyframes heartbeat {
+  0%{transform:scale(1);}
+  50%{transform:scale(1.07);}
+  100%{transform:scale(1);}
+}
+
+/* buttons */
+button {
+  padding:12px 25px;
+  font-size:18px;
+  background:#ff4d6d;
+  color:white;
+  border:none;
+  border-radius:15px;
+  cursor:pointer;
+  margin-top:20px;
+}
+
+/* soft floating hearts */
+.heart {
+  position:absolute;
+  pointer-events:none;
+  font-size:28px;
+  opacity:0.5;
+  animation:floatUp linear forwards;
+}
+@keyframes floatUp {
+  0% { transform:translateY(100vh) scale(0.8); opacity:0.5; }
+  80% { transform:translateY(-5vh) scale(1); opacity:0.4; }
+  100% { transform:translateY(-10vh) scale(1.2); opacity:0; }
+}
+
+/* quiz result */
+#result {
+  font-size:22px;
+  color:#ff4d6d;
+  margin-top:20px;
+  font-weight:bold;
+}
+
+/* star rating */
+.star {
+  font-size:30px;
+  cursor:pointer;
+  color:#ccc;
+}
+.star.selected { color:#ff4d6d; }
+
+/* confetti */
+.confetti {
+  position:fixed;
+  width:10px;
+  height:10px;
+  background:gold;
+  top:0;
+  animation:confettiFall linear forwards;
+}
+@keyframes confettiFall {
+  0% {transform:translateY(0) rotate(0deg);}
+  100% {transform:translateY(100vh) rotate(360deg);}
+}
+</style>
+</head>
+<body>
+
+<script>
+// Floating hearts
+function createHeart(){
+  const heart=document.createElement("div");
+  heart.className="heart";
+  const hearts=["❤️","💖","💗","💛"];
+  heart.innerHTML=hearts[Math.floor(Math.random()*hearts.length)];
+  heart.style.left=Math.random()*100+"vw";
+  heart.style.fontSize=(20+Math.random()*20)+"px";
+  heart.style.animationDuration=(5+Math.random()*3)+"s";
+  document.body.appendChild(heart);
+  setTimeout(()=>heart.remove(), parseFloat(heart.style.animationDuration)*1000);
+}
+setInterval(createHeart,600); // less frequent
+</script>
+
+<!-- Pages -->
+<div class="page active" id="page1">
+  <div class="cardBox">
+    <img src="/special file/1.jpg" class="circlePhoto">
+    <h1 class="glow">🎂 Happy Birthday 🎂</h1>
+    <h2>You are special 💖</h2>
+    <button onclick="nextPage(2)">Open Card 💌</button>
+  </div>
+</div>
+
+<div class="page" id="page2">
+  <div class="cardBox">
+    <h2>Special Message For You 💫</h2>
+    <p>
+      Happy Birthday!<br>
+      You are one of the most important people in my life.<br>
+      Your smile makes everything brighter.<br>
+      I am really lucky to have you as my best friend.<br>
+      Stay happy always 😊<br><br>
+      — Omkar
+    </p>
+    <button onclick="nextPage(3)">Next ➡</button>
+  </div>
+</div>
+
+<div class="page" id="page3">
+  <div class="cardBox">
+    <h2>Your Beautiful Smile 😊</h2>
+    <img src="/special file/2.jpg" width="250">
+    <button onclick="nextPage(4)">Next ➡</button>
+  </div>
+</div>
+<div class="page" id="page4">
+  <div class="cardBox">
+    <h2>Stay Happy Always 🌸</h2>
+    <img src="/special file/3.jpg" width="250">
+    <button onclick="nextPage(5)">Next ➡</button>
+  </div>
+</div>
+<div class="page" id="page5">
+  <div class="cardBox">
+    <h2>Keep Smiling Forever 💫</h2>
+    <img src="/special file/4.jpg" width="250">
+    <button onclick="nextPage(6)">Next ➡</button>
+  </div>
+</div>
+
+<div class="page" id="page6">
+  <div class="cardBox">
+    <h2>Mini Friendship Game 🎮</h2>
+    <p>1️⃣ Who is your best friend?</p>
+    <button onclick="wrong()">Someone Else</button><br>
+    <button onclick="correct()">Omkar</button>
+
+    <p>2️⃣ Party kadhi denar?</p>
+    <input type="date" id="partyDate"><br><br>
+
+    <p>3️⃣ Friendship Rating ⭐ (1–5)</p>
+    <span class="star" onclick="rateStar(this,1)">★</span>
+    <span class="star" onclick="rateStar(this,2)">★</span>
+    <span class="star" onclick="rateStar(this,3)">★</span>
+    <span class="star" onclick="rateStar(this,4)">★</span>
+    <span class="star" onclick="rateStar(this,5)">★</span>
+
+    <div id="result"></div><br>
+    <button onclick="submitGame()">Submit</button>
+  </div>
+</div>
+
+<div class="page" id="page7">
+  <div class="cardBox">
+    <h2>Best Friend Forever 💛</h2>
+    <p id="finalSummary"></p>
+    <audio controls>
+      <source src="song.mp3">
+    </audio>
+  </div>
+</div>
+
+<script>
+let friendshipRating = 0;
+let userAnswers = {};
+
+function rateStar(el, val){
+  friendshipRating = val;
+  const stars = el.parentNode.querySelectorAll(".star");
+  stars.forEach((s,i)=>s.classList.toggle("selected", i<val));
+}
+
+function submitGame(){
+  const bestFriend = document.querySelector("#page6 button:nth-of-type(2)").innerText;
+  const dateVal = document.getElementById("partyDate").value;
+  userAnswers = {
+    bestFriend: bestFriend,
+    partyDate: dateVal,
+    rating: friendshipRating
+  };
+  if(!dateVal){
+    alert("Please select a party date!");
+    return;
+  }
+  // show summary on final page
+  document.getElementById("finalSummary").innerHTML =
+    `Your Answers:<br>
+     Best Friend: ${userAnswers.bestFriend}<br>
+     Party Date: ${userAnswers.partyDate}<br>
+     Friendship Rating: ${userAnswers.rating}/5`;
+
+  // start confetti
+  startConfetti();
+
+  setTimeout(()=>nextPage(7),1500);
+}
+
+function startConfetti(){
+  for(let i=0;i<100;i++){
+    const c=document.createElement("div");
+    c.className="confetti";
+    c.style.left=Math.random()*100+"vw";
+    c.style.background=`hsl(${Math.random()*360},100%,50%)`;
+    c.style.animationDuration= (3+Math.random()*2) + "s";
+    c.style.width=(5+Math.random()*5)+"px";
+    c.style.height=(5+Math.random()*5)+"px";
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(),4000);
+  }
+}
+
+function nextPage(page){
+  const pages=document.querySelectorAll(".page");
+  pages.forEach(p=>p.classList.remove("active"));
+  document.getElementById("page"+page).classList.add("active");
+}
+
+function correct(){
+  document.getElementById("result").innerHTML =
+    "Correct answer! You are my favorite person forever 💛";
+}
+
+function wrong(){
+  document.getElementById("result").innerHTML = "Try again 😄";
+}
+</script>
+</body>
+</html>
